@@ -1,14 +1,19 @@
 package com.github.trades;
 
 import com.github.trades.repositories.TradesRepository;
+import com.github.trades.validation.TradesSetter;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/trades")
@@ -46,6 +51,26 @@ public class TradesController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteTrade(@PathVariable ObjectId id) {
         repository.delete(repository.findBy_id(id));
+    }
+
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    public List<Trades> getTradeByParameters(@RequestParam Map<String, String> params) {
+        List<Trades> list;
+
+        Trades trades = new Trades();
+        boolean modified = params.entrySet().stream().
+                map(entry -> TradesSetter.setField(trades, entry.getKey(), entry.getValue())).
+                anyMatch(result -> result == true);
+
+        if(modified)
+            list = repository.findAll(Example.of(trades,
+                    ExampleMatcher.matching()
+                            .withIgnoreNullValues()
+                            .withIgnorePaths("_id", "_class")));
+        else
+            list = new ArrayList<>();
+
+        return list;
     }
 
 }
