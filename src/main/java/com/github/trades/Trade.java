@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.Instant;
 
-public class Trades {
+public class Trade {
     @Id
     public ObjectId _id;
 
@@ -18,10 +18,10 @@ public class Trades {
     public Instant tradeDate;
 
     // Constructors
-    public Trades() {
+    public Trade() {
     }
 
-    public Trades(ObjectId _id, String tradeId, String counterparty, String tradeDate) {
+    public Trade(ObjectId _id, String tradeId, String counterparty, String tradeDate) {
         this._id = _id;
         this.tradeId = tradeId;
         this.counterparty = counterparty;

@@ -1,6 +1,6 @@
 package com.github.trades.validation;
 
-import com.github.trades.Trades;
+import com.github.trades.Trade;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -12,14 +12,14 @@ public class TradesSetter {
     private static Map<String, Method> fieldToMethodMap;
 
     static {
-        fieldToMethodMap = Arrays.stream(Trades.class.getDeclaredMethods()).
+        fieldToMethodMap = Arrays.stream(Trade.class.getDeclaredMethods()).
                 filter(method -> method.getName().startsWith("set")).
                 collect(Collectors.toMap(
                         method -> getFieldNameFromSetterName(method.getName()),
                         Function.identity()));
     }
 
-    public static boolean setField(Trades trade, String fieldName, String value) {
+    public static boolean setField(Trade trade, String fieldName, String value) {
         boolean success = false;
         if (isFieldValid(fieldName)) {
             try {

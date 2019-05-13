@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
-public class TradesTests {
+public class TradeTests {
 
     @Test
     public void tradeDateSetter() {
-        Trades trade = new Trades();
+        Trade trade = new Trade();
         trade.setTradeDate("2019-10-26");
 
         assertNotNull(trade.getTradeDate());

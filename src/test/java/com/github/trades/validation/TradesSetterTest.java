@@ -1,6 +1,6 @@
 package com.github.trades.validation;
 
-import com.github.trades.Trades;
+import com.github.trades.Trade;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,7 @@ public class TradesSetterTest {
 
     @Test
     public void setFieldTest() throws Exception {
-        Trades trade = new Trades();
+        Trade trade = new Trade();
         boolean result = TradesSetter.setField(trade, "tradeId", "thatId");
         assertEquals("thatId", trade.getTradeId());
         assertTrue(result);
