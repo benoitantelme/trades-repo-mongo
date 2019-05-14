@@ -1,4 +1,4 @@
-package com.github.trades;
+package com.github.trades.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;

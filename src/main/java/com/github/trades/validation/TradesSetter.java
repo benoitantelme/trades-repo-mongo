@@ -1,6 +1,7 @@
 package com.github.trades.validation;
 
-import com.github.trades.Trade;
+import com.github.trades.model.SetterResult;
+import com.github.trades.model.Trade;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -19,18 +20,19 @@ public class TradesSetter {
                         Function.identity()));
     }
 
-    public static boolean setField(Trade trade, String fieldName, String value) {
-        boolean success = false;
+    public static SetterResult setField(Trade trade, String fieldName, String value) {
+        SetterResult result = new SetterResult();
         if (isFieldValid(fieldName)) {
             try {
                 fieldToMethodMap.get(fieldName).invoke(trade, value);
-                success = true;
+                result.setSuccessful(true);
             }catch(Exception e){
+                result.addException(e);
                 e.printStackTrace();
             }
         }
 
-        return success;
+        return result;
     }
 
     public static boolean isFieldValid(String fieldName) {

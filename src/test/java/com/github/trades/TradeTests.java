@@ -1,5 +1,6 @@
 package com.github.trades;
 
+import com.github.trades.model.Trade;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;

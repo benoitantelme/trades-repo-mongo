@@ -1,5 +1,7 @@
 package com.github.trades;
 
+import com.github.trades.model.SetterResult;
+import com.github.trades.model.Trade;
 import com.github.trades.repositories.TradesRepository;
 import com.github.trades.validation.TradesSetter;
 import org.bson.types.ObjectId;
@@ -54,21 +56,25 @@ public class TradesController {
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
-    public List<Trade> getTradesByParameters(@RequestParam Map<String, String> params) {
+    public List<Trade> getTradeByParameters(@RequestParam Map<String, String> params) throws Exception {
         List<Trade> list;
 
         Trade trades = new Trade();
-        boolean modified = params.entrySet().stream().
+        SetterResult result = params.entrySet().stream().
                 map(entry -> TradesSetter.setField(trades, entry.getKey(), entry.getValue())).
-                anyMatch(result -> result == true);
+                reduce(new SetterResult(false, new ArrayList<>()),
+                        (a, b) -> a.mergeResults(b));
 
-        if(modified)
+        if(!result.getExceptions().isEmpty()){
+            throw result.getExceptions().get(0);
+        }else if(result.isSuccessful()){
             list = repository.findAll(Example.of(trades,
                     ExampleMatcher.matching()
                             .withIgnoreNullValues()
                             .withIgnorePaths("_id", "_class")));
-        else
+        }else{
             list = new ArrayList<>();
+        }
 
         return list;
     }

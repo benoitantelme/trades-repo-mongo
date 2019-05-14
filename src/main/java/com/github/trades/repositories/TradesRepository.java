@@ -1,6 +1,6 @@
 package com.github.trades.repositories;
 
-import com.github.trades.Trade;
+import com.github.trades.model.Trade;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
