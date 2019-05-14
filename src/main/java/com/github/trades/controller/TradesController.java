@@ -1,4 +1,4 @@
-package com.github.trades;
+package com.github.trades.controller;
 
 import com.github.trades.model.SetterResult;
 import com.github.trades.model.Trade;
