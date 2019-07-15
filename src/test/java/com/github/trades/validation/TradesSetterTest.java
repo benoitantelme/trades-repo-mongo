@@ -1,7 +1,10 @@
 package com.github.trades.validation;
 
+import com.github.trades.model.SetterResult;
 import com.github.trades.model.Trade;
 import org.junit.Test;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,6 +40,16 @@ public class TradesSetterTest {
         assertFalse(success);
     }
 
+    @Test
+    public void setTrade() throws Exception {
+        Map.of("tradeId", "thatId");
 
+        SetterResult result = TradesSetter.setTrade(Map.of("tradeId", "thatId"));
+        assertTrue(result.isSuccessful());
+        assertEquals("thatId", result.getTrade().getTradeId());
+
+        result = TradesSetter.setTrade(Map.of("tradeIdddd", "thatId"));
+        assertFalse(result.isSuccessful());
+    }
 
 }

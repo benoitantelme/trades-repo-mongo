@@ -59,16 +59,12 @@ public class TradesController {
     public List<Trade> getTradeByParameters(@RequestParam Map<String, String> params) throws Exception {
         List<Trade> list;
 
-        Trade trades = new Trade();
-        SetterResult result = params.entrySet().stream().
-                map(entry -> TradesSetter.setField(trades, entry.getKey(), entry.getValue())).
-                reduce(new SetterResult(false, new ArrayList<>()),
-                        (a, b) -> a.mergeResults(b));
+        SetterResult result = TradesSetter.setTrade(params);
 
         if(!result.getExceptions().isEmpty()){
             throw result.getExceptions().get(0);
         }else if(result.isSuccessful()){
-            list = repository.findAll(Example.of(trades,
+            list = repository.findAll(Example.of(result.getTrade(),
                     ExampleMatcher.matching()
                             .withIgnoreNullValues()
                             .withIgnorePaths("_id", "_class")));

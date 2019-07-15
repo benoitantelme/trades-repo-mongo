@@ -6,6 +6,7 @@ import java.util.List;
 public class SetterResult {
     private boolean successful;
     private List<Exception> exceptions = new ArrayList<>();
+    private Trade trade;
 
     public SetterResult(){}
 
@@ -33,6 +34,9 @@ public class SetterResult {
     public void addException(Exception exception) {
         this.exceptions.add(exception);
     }
+
+    public void setTrade(Trade trade) { this.trade = trade; }
+    public Trade getTrade() { return trade; }
 
     public SetterResult mergeResults(SetterResult result){
         successful = successful || result.isSuccessful();

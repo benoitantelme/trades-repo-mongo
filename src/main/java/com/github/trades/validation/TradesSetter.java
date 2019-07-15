@@ -4,6 +4,7 @@ import com.github.trades.model.SetterResult;
 import com.github.trades.model.Trade;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,7 +21,18 @@ public class TradesSetter {
                         Function.identity()));
     }
 
-    public static SetterResult setField(Trade trade, String fieldName, String value) {
+    public static SetterResult setTrade(Map<String, String> params) {
+        Trade trade = new Trade();
+        SetterResult result = params.entrySet().stream().
+                map(entry -> TradesSetter.setField(trade, entry.getKey(), entry.getValue())).
+                reduce(new SetterResult(false, new ArrayList<>()),
+                        (a, b) -> a.mergeResults(b));
+        result.setTrade(trade);
+
+        return result;
+    }
+
+    protected static SetterResult setField(Trade trade, String fieldName, String value) {
         SetterResult result = new SetterResult();
         if (isFieldValid(fieldName)) {
             try {
