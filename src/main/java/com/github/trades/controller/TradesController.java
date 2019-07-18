@@ -26,6 +26,12 @@ public class TradesController {
     @Autowired
     MongoOperations operations;
 
+    private final TradesSetter setter;
+
+    public TradesController(TradesSetter setter) {
+        this.setter = setter;
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Trade> getAllTrades() {
         return repository.findAll();
@@ -59,7 +65,7 @@ public class TradesController {
     public List<Trade> getTradeByParameters(@RequestParam Map<String, String> params) throws Exception {
         List<Trade> list;
 
-        SetterResult result = TradesSetter.setTrade(params);
+        SetterResult result = setter.setTrade(params);
 
         if(!result.getExceptions().isEmpty()){
             throw result.getExceptions().get(0);

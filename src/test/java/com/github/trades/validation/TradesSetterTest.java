@@ -1,3 +1,4 @@
+
 package com.github.trades.validation;
 
 import com.github.trades.model.SetterResult;
@@ -11,31 +12,33 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TradesSetterTest {
+    TradesSetter setter = new TradesSetter();
+
     @Test
     public void isFieldValidTest(){
-        assertFalse(TradesSetter.isFieldValid("potatoe"));
-        assertTrue(TradesSetter.isFieldValid("tradeId"));
+        assertFalse(setter.isFieldValid("potatoe"));
+        assertTrue(setter.isFieldValid("tradeId"));
     }
 
     @Test
     public void getFieldNameFromSetterName(){
-        assertEquals("name", TradesSetter.getFieldNameFromSetterName("setName"));
-        assertEquals("potatoe", TradesSetter.getFieldNameFromSetterName("setPotatoe"));
+        assertEquals("name", setter.getFieldNameFromSetterName("setName"));
+        assertEquals("potatoe", setter.getFieldNameFromSetterName("setPotatoe"));
 
-        assertEquals("", TradesSetter.getFieldNameFromSetterName(null));
-        assertEquals("", TradesSetter.getFieldNameFromSetterName(""));
-        assertEquals("", TradesSetter.getFieldNameFromSetterName("set"));
+        assertEquals("", setter.getFieldNameFromSetterName(null));
+        assertEquals("", setter.getFieldNameFromSetterName(""));
+        assertEquals("", setter.getFieldNameFromSetterName("set"));
     }
 
     @Test
     public void setFieldTest() throws Exception {
         Trade trade = new Trade();
-        boolean success = TradesSetter.setField(trade, "tradeId", "thatId").
+        boolean success = setter.setField(trade, "tradeId", "thatId").
                 isSuccessful();
         assertEquals("thatId", trade.getTradeId());
         assertTrue(success);
 
-        success = TradesSetter.setField(trade, "tradeIdd", "thatId").
+        success = setter.setField(trade, "tradeIdd", "thatId").
                 isSuccessful();
         assertFalse(success);
     }
@@ -44,11 +47,11 @@ public class TradesSetterTest {
     public void setTrade() throws Exception {
         Map.of("tradeId", "thatId");
 
-        SetterResult result = TradesSetter.setTrade(Map.of("tradeId", "thatId"));
+        SetterResult result = setter.setTrade(Map.of("tradeId", "thatId"));
         assertTrue(result.isSuccessful());
         assertEquals("thatId", result.getTrade().getTradeId());
 
-        result = TradesSetter.setTrade(Map.of("tradeIdddd", "thatId"));
+        result = setter.setTrade(Map.of("tradeIdddd", "thatId"));
         assertFalse(result.isSuccessful());
     }
 

@@ -1,7 +1,9 @@
+
 package com.github.trades.validation;
 
 import com.github.trades.model.SetterResult;
 import com.github.trades.model.Trade;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,10 +12,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Service
 public class TradesSetter {
-    private static Map<String, Method> fieldToMethodMap;
+    private Map<String, Method> fieldToMethodMap;
 
-    static {
+    public TradesSetter(){
         fieldToMethodMap = Arrays.stream(Trade.class.getDeclaredMethods()).
                 filter(method -> method.getName().startsWith("set")).
                 collect(Collectors.toMap(
@@ -21,10 +24,10 @@ public class TradesSetter {
                         Function.identity()));
     }
 
-    public static SetterResult setTrade(Map<String, String> params) {
+    public SetterResult setTrade(Map<String, String> params) {
         Trade trade = new Trade();
         SetterResult result = params.entrySet().stream().
-                map(entry -> TradesSetter.setField(trade, entry.getKey(), entry.getValue())).
+                map(entry -> setField(trade, entry.getKey(), entry.getValue())).
                 reduce(new SetterResult(false, new ArrayList<>()),
                         (a, b) -> a.mergeResults(b));
         result.setTrade(trade);
@@ -32,7 +35,7 @@ public class TradesSetter {
         return result;
     }
 
-    protected static SetterResult setField(Trade trade, String fieldName, String value) {
+    protected SetterResult setField(Trade trade, String fieldName, String value) {
         SetterResult result = new SetterResult();
         if (isFieldValid(fieldName)) {
             try {
@@ -47,7 +50,7 @@ public class TradesSetter {
         return result;
     }
 
-    public static boolean isFieldValid(String fieldName) {
+    public boolean isFieldValid(String fieldName) {
         return fieldToMethodMap.keySet().contains(fieldName);
     }
 
@@ -55,12 +58,11 @@ public class TradesSetter {
      * @param setterName
      * @return method name without set and with a lower case starting letter for the field name
      */
-    protected static String getFieldNameFromSetterName(String setterName) {
+    protected String getFieldNameFromSetterName(String setterName) {
         if (setterName != null && setterName.length() >= 4)
             return setterName.substring(3, 4).toLowerCase() + setterName.substring(4);
         else
             return "";
     }
-
 
 }
