@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -42,13 +44,37 @@ public class TradesControllerTest {
     }
 
     @Test
-    public void testGetAll(){
-        assertTrue(controller.getAllTrades().size() == 3);
+    public void testGetAll() throws Exception{
+        List<Trade> result = getFutureResult(controller.getAllTrades());
+        assertTrue(result.size() == 3);
     }
 
     @Test
-    public void testGetTradeById(){
-        assertTrue(controller.getTradeByTradeId("trade_1").equals(trade1));
+    public void testGetTradeById() throws  Exception{
+        Trade result = getFutureResult(controller.getTradeByTradeId("trade_1"));
+        assertTrue(result.equals(trade1));
+    }
+
+
+    /**
+     * @param future
+     * @param <T>
+     * @throws InterruptedException
+     * @throws ExecutionException
+     *
+     * returns the type when it is completed
+     */
+    protected <T> T getFutureResult(Future<T> future)
+            throws InterruptedException, ExecutionException {
+        System.out.println("Invoking an asynchronous method. "
+                + Thread.currentThread().getName());
+
+        while (true) {
+            if (future.isDone()) {
+                return future.get();
+            }
+            Thread.sleep(500);
+        }
     }
 
 
