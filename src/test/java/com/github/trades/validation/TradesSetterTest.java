@@ -4,6 +4,9 @@ package com.github.trades.validation;
 import com.github.trades.model.SetterResult;
 import com.github.trades.model.Trade;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
 
@@ -11,8 +14,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TradesSetterTest {
-    TradesSetter setter = new TradesSetter();
+    @InjectMocks
+    TradesSetter setter;
 
     @Test
     public void isFieldValidTest(){

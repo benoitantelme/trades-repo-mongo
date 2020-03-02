@@ -3,13 +3,14 @@ package com.github.trades.controller;
 
 import com.github.trades.model.Trade;
 import com.github.trades.repositories.TradesRepository;
-import com.github.trades.validation.TradesSetter;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,6 +19,7 @@ import java.util.concurrent.Future;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TradesControllerTest {
     private Trade trade1 =
             new Trade(new ObjectId(), "trade_1", "cpt1", "2019-10-26");
@@ -30,8 +32,6 @@ public class TradesControllerTest {
 
     @Before
     public void initMocks(){
-        controller = new TradesController(new TradesSetter());
-
         MockitoAnnotations.initMocks(this);
 
         when(repository.findAll()).thenReturn(List.of(
